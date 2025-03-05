@@ -3,9 +3,7 @@
 import needle from 'needle';
 
 
-needle.get("http://localhost:3000/find-by-isbn-author?isbn=978-0-7475-3269-9&amp;author=J.K+Rowling",(err,res)=>{
-    console.log(res.body);
-});
+
 
 needle.post(
 
@@ -15,3 +13,7 @@ needle.post(
         console.log(res.body);
     }
 );
+
+needle.get("http://localhost:3000/find-by-isbn-author?isbn=978-0-7475-3269-9&amp;author=J.K+Rowling",(err,res)=>{
+    console.log(res.body);
+});
