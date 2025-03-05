@@ -1,6 +1,6 @@
 
 import express from "express";
-import {appendFileSync} from "node:fs";
+import {appendFileSync, readFileSync} from "node:fs";
 import fs from 'node:fs';
 
 const app = express(); //instantiating server
@@ -46,6 +46,28 @@ app.get('/find-by-isbn-author',(req,res)=>{
     res.json({book});
 
 });
+
+app.get('/find-by-isbn-author',(req,res)=>{
+    
+    var author = req.query.author;
+    var isbn = req.query.isbn;
+
+    const data2 = readFileSync('books.txt', 'utf8');
+    const books = data2.trim().split("\n");
+    var result;
+
+    for(var book of books){
+
+        const [bookName, bookISBN, bookAuthor, yearPublished] = book.split(",");
+        if(author == bookAuthor){
+            result = {bookName, bookISBN, bookAuthor, yearPublished};
+        }
+    }
+
+    res.json({result});
+
+});
+
 
 
 
