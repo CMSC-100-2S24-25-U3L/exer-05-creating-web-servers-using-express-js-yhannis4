@@ -45,9 +45,9 @@ app.get('/find-by-isbn-author',(req,res)=>{
     var author = req.query.author;
     var isbn = req.query.isbn;
 
-    var book = readFile(isbn, author);
+    const book = readFile(isbn, author);
 
-    res.send(`Your book with isbn:` + req.query.isbn + `and author:` + req.query.author + `is: `, book);
+    res.json({book});
 
 });
 
@@ -55,10 +55,14 @@ app.get('/find-by-isbn-author',(req,res)=>{
 
 
 app.post('/add-book', (req,res) => {
-    res.send('Received a POST request from ' + req.body.bookName);
 
-    req.body.success = writeFile(req.body.bookName, req.body.ISBN, req.body.Author, req.body.yearPublished);
+    if (!req.body.bookName || !req.body.isbn || !req.body.author || !req.body.yearPublished) {
+        return res.status(400).json({ success: false, message: 'All fields are required' });
+    }
+
+    const success = writeFile(req.body.bookName, req.body.ISBN, req.body.Author, req.body.yearPublished);
     
+    res.json({ success });
 });
 
 
