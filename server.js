@@ -16,26 +16,22 @@ function writeFile(bookName, ISBN, Author, Year){
 }
 
 function readFile(ISBN, author){
-    
-    var x = ISBN;
-    var y = author;
+
 
     const data = fs.readFileSync('books.txt', 'utf8');
 
-    var newData = data.split("\n");
+    var books = data.trim().split("\n");
 
 
-    for(var i = 0; i < newData.length-1; i++){
+    for(var book of books){
 
-        var item = newData[i];
-
-        var currentBook = item.split(",");
-
-        if (x == currentBook[1] && y == currentBook[2]){
-            console.log(currentBook.toString());
-            return currentBook.toString();
+        const [bookName, bookISBN, bookAuthor, yearPublished] = book.split(",");
+        if(ISBN == bookISBN && author == bookAuthor){
+            return {bookName, bookISBN, bookAuthor, yearPublished};
         }
     }
+
+    return null;
 }
 
 
@@ -57,12 +53,12 @@ app.get('/find-by-isbn-author',(req,res)=>{
 app.post('/add-book', (req,res) => {
 
     if (!req.body.bookName || !req.body.isbn || !req.body.author || !req.body.yearPublished) {
-        return res.status(400).json({ success: false, message: 'All fields are required' });
+        return res.status(400).json({ success: false, message: 'All fields are required.' });
     }
 
     const success = writeFile(req.body.bookName, req.body.ISBN, req.body.Author, req.body.yearPublished);
     
-    res.json({ success });
+    res.json({ success }); 
 });
 
 
